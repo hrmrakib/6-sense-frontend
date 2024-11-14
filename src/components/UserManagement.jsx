@@ -25,7 +25,7 @@ function UserManagement() {
   } = useQuery({
     queryKey: ["currentUsers"],
     queryFn: async () => {
-      const result = await axiosPublic.get("/users");
+      const result = await axiosPublic.get("/api/users");
       return result.data;
     },
   });
@@ -34,32 +34,32 @@ function UserManagement() {
     e.preventDefault();
     setNameError("");
 
-    const userName = e.target.name.value.trim();
-    const userEmail = e.target.email.value;
-
-    if (userName.length < 3) {
-      return setNameError("Name must be 3 characters");
-    }
+    const firstname = e.target.firstname.value.trim();
+    const lastname = e.target.lastname.value.trim();
+    const email = e.target.email.value;
+    const phone = e.target.phone.value;
 
     axiosPublic
-      .post("/create", { userName, userEmail })
+      .post("/api/create", { firstname, lastname, email, phone })
       .then((res) => {
-        console.log(res.data?.isExist);
-        if (res.data?.isExist) {
-          return toast.error("Email already exist!");
+        console.log(res);
+        if (res.data?.insertedId) {
+          return toast.success("Email already exist!");
         }
-        if (res.data.message === "success") {
-          refetch();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: `${userName} is an user now!`,
-            showConfirmButton: false,
-            timer: 1200,
-          });
-        }
+        // if (res.data.message === "success") {
+        //   refetch();
+        //   Swal.fire({
+        //     position: "top-end",
+        //     icon: "success",
+        //     title: `${userName} is an user now!`,
+        //     showConfirmButton: false,
+        //     timer: 1200,
+        //   });
+        // }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err.message);
+      });
 
     setTimeout(() => {
       return setOpenUserModal(false);
@@ -224,12 +224,29 @@ function UserManagement() {
             </div>
           </div>
           <form onSubmit={handleCreateUser} className='user_form'>
-            <input type='text' name='name' placeholder='Enter name' required />
+            <input
+              type='text'
+              name='firstname'
+              placeholder='Enter first name'
+              required
+            />
+            <input
+              type='text'
+              name='lastname'
+              placeholder='Enter last name'
+              required
+            />
             <p className='error'>{nameError}</p>
             <input
               type='email'
               name='email'
               placeholder='Enter email'
+              required
+            />
+            <input
+              type='number'
+              name='phone'
+              placeholder='Enter phone number'
               required
             />
             <button type='submit' className='btn submit_btn'>
