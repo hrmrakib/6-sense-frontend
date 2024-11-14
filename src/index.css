@@ -1,0 +1,139 @@
+/* reset default style */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* app style */
+
+.app {
+  background-color: rgba(114, 118, 121, 0.153);
+  min-height: 100vh;
+}
+.app_heading {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.693);
+  padding: 30px 0;
+}
+
+/* container (content-box) */
+.table_container {
+  background-color: rgb(250, 250, 250);
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 1px 1px 1px gray;
+  position: relative;
+}
+.header_box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.container_heading {
+  color: rgb(27, 27, 27);
+}
+.header_box button {
+  background-color: rgb(78, 78, 225);
+}
+.t_heading {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+.action_end {
+  text-align: center !important;
+}
+.table {
+  min-width: 100%;
+  background-color: white;
+}
+.t_heading {
+  padding: 16px 8px;
+  border-bottom: 4px solid gray;
+  background-color: aliceblue;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(43, 41, 41);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.tbody_row:hover {
+  background-color: rgba(202, 202, 202, 0.57);
+}
+.tbody_data {
+  padding: 15px 8px;
+  border-bottom: 1px solid rgba(173, 173, 173, 0.487);
+}
+.action {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+.btn {
+  color: white;
+  font-size: 14px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+.update_button {
+  background-color: blue;
+  transition: 200ms;
+}
+.update_button:hover {
+  background-color: rgb(49, 49, 231);
+}
+.delete_button {
+  background-color: rgb(255, 0, 60);
+  transition: 200ms;
+}
+.delete_button:hover {
+  background-color: rgb(223, 41, 83);
+}
+
+/* create_user */
+.create_user {
+  background-color: rgb(231, 231, 231);
+  position: absolute;
+  top: 50px;
+  left: 20%;
+  width: 550px;
+  padding: 24px;
+  border-radius: 12px;
+}
+.create_user_heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.close_user_modal {
+  cursor: pointer;
+}
+.user_form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.user_form input {
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: black;
+  font-size: 17px;
+}
+.submit_btn {
+  background-color: blueviolet;
+  font-size: 18px;
+}
+.error {
+  color: red;
+  font-weight: 500;
+}
