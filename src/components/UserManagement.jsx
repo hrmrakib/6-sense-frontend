@@ -43,22 +43,17 @@ function UserManagement() {
       .post("/api/create", { firstname, lastname, email, phone })
       .then((res) => {
         console.log(res);
-        if (res.data?.insertedId) {
-          return toast.success("Email already exist!");
+
+        if (res.data?.message) {
+          return toast.error(res.data.message);
         }
-        // if (res.data.message === "success") {
-        //   refetch();
-        //   Swal.fire({
-        //     position: "top-end",
-        //     icon: "success",
-        //     title: `${userName} is an user now!`,
-        //     showConfirmButton: false,
-        //     timer: 1200,
-        //   });
-        // }
+        if (res.data?.insertedId) {
+          refetch();
+          return toast.success("User created successfully!");
+        }
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log("erroooor", err.message);
       });
 
     setTimeout(() => {
@@ -125,14 +120,14 @@ function UserManagement() {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosPublic
-          .delete(`/delete/${user?.email}`)
+          .delete(`/api/delete/${user?.email}`)
           .then((res) => {
             console.log(res.data);
-            if (res.data?.affectedRows) {
+            if (res.data?.deletedCount > 0) {
               refetch();
               Swal.fire({
                 title: "Deleted!",
-                text: `${user?.name} has been deleted.`,
+                text: `${user?.firstname} has been deleted.`,
                 icon: "success",
               });
             }
