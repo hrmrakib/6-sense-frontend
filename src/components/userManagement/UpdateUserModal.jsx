@@ -8,10 +8,10 @@ const UpdateUserModal = ({
   refetch,
   currentUser,
 }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState();
+  const [firstName, setFirstName] = useState(currentUser?.firstName);
+  const [lastName, setLastName] = useState(currentUser?.lastName);
+  const [email, setEmail] = useState(currentUser?.email);
+  const [phone, setPhone] = useState(currentUser?.phone);
 
   const axiosPublic = useAxiosPublic();
 
