@@ -3,10 +3,10 @@ import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import ScaleLoader from "react-spinners/ScaleLoader";
 import UserDetailModal from "./userManagement/UserDetailModal";
 import CreateUserModal from "./userManagement/CreateUserModal";
 import UpdateUserModal from "./userManagement/UpdateUserModal";
+import Loading from "./loading/Loading";
 
 function UserManagement() {
   const [openUserModal, setOpenUserModal] = useState(false);
@@ -15,11 +15,6 @@ function UserManagement() {
   const axiosPublic = useAxiosPublic();
 
   const [currentUpdateableUser, setCurrentUpdateableUser] = useState(null);
-
-  const [onChangeUpdateFirstName, setOnChangeUpdateFirstName] = useState("");
-  const [onChangeUpdateLastName, setOnChangeUpdateLastName] = useState("");
-  const [onChangeUpdateEmail, setOnChangeUpdateEmail] = useState("");
-  const [onChangeUpdatePhone, setOnChangeUpdatePhone] = useState(null);
 
   const [userDetail, setUserDetail] = useState({
     firstname: "",
@@ -122,22 +117,7 @@ function UserManagement() {
           </tr>
         </thead>
         <tbody>
-          <tr className='tbody_row'>
-            {loading && (
-              <td
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  margin: "20px auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ScaleLoader />
-              </td>
-            )}
-          </tr>
+          <Loading loading={loading} />
           {users?.map((user, index) => (
             <tr key={index} className='tbody_row'>
               <td className='tbody_data'>{index + 1}</td>
