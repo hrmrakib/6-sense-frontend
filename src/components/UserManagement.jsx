@@ -61,7 +61,7 @@ function UserManagement() {
 
     setTimeout(() => {
       return setOpenUserModal(false);
-    }, 999);
+    }, 99);
   };
 
   const handleUpdateUser = (user) => {
@@ -93,18 +93,19 @@ function UserManagement() {
     axiosPublic
       .put(`/api/update/${onChangeUpdateEmail}`, updatedUserInfo)
       .then((res) => {
-        if (res.data.message === "success") {
+        console.log(res.data);
+        if (res.data?.modifiedCount > 0) {
           refetch();
           toast.success("Updated successfully!");
           setOpenUpdateModal(false);
         }
       })
       .catch((err) => {
-        toast.error(err);
+        toast.error(err.message);
       });
   };
 
-  const handleDelete = (user) => {
+  const handleDeleteUser = (user) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -135,6 +136,24 @@ function UserManagement() {
     });
   };
 
+  const handleUserDetail = (user) => {
+    console.log(user);
+  };
+
+  const handleBlockUser = (user) => {
+    refetch();
+    axiosPublic
+      .put(`/api/userStatus/${user.email}`)
+      .then((res) => {
+        if (res.data?.modifiedCount > 0) {
+          refetch();
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
     <div className='table_container'>
       <Toaster position='top-center' reverseOrder={false} />
@@ -148,10 +167,8 @@ function UserManagement() {
         <thead>
           <tr>
             <th className='t_heading'>#</th>
-            <th className='t_heading'>First Name</th>
-            <th className='t_heading'>Last Name</th>
-            <th className='t_heading'>Email</th>
-            <th className='t_heading'>Phone Number</th>
+            <th className='t_heading'>Full Name</th>
+            <th className='t_heading'>User Details</th>
             <th className='t_heading action_end'>Action</th>
           </tr>
         </thead>
@@ -175,11 +192,13 @@ function UserManagement() {
           {users?.map((user, index) => (
             <tr key={index} className='tbody_row'>
               <td className='tbody_data'>{index + 1}</td>
-              <td className='tbody_data'>{user?.firstname}</td>
-              <td className='tbody_data'>{user?.lastname}</td>
-              <td className='tbody_data'>{user?.email}</td>
-              <td className='tbody_data'>{user?.phone}</td>
-
+              <td className='tbody_data'>{`${user?.firstname} ${user?.lastname}`}</td>
+              <td
+                className='tbody_data cursor-pointer underline'
+                onClick={() => handleUserDetail(user)}
+              >
+                See Detail
+              </td>
               <td className='tbody_data'>
                 <div className='action'>
                   <button
@@ -190,10 +209,18 @@ function UserManagement() {
                   </button>
 
                   <button
-                    onClick={() => handleDelete(user)}
+                    onClick={() => handleDeleteUser(user)}
                     className='btn delete_button'
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() => handleBlockUser(user)}
+                    className={`btn ${
+                      user.block ? "unblock_button" : "block_button"
+                    }`}
+                  >
+                    {user.block ? "Unblock" : "Block"}
                   </button>
                 </div>
               </td>
@@ -265,7 +292,6 @@ function UserManagement() {
               value={onChangeUpdateFirstName}
               onChange={(e) => setOnChangeUpdateFirstName(e.target.value)}
               name='updateFirstName'
-              //   placeholder='Update first name'
               required
             />
             <input
@@ -273,16 +299,14 @@ function UserManagement() {
               value={onChangeUpdateLastName}
               onChange={(e) => setOnChangeUpdateLastName(e.target.value)}
               name='updateLastName'
-              //   placeholder='Enter name'
               required
             />
-            {/* <p className='error'>{updateError.nameError}</p> */}
+
             <input
               type='email'
               name='updateEmail'
               onChange={(e) => setOnChangeUpdateEmail(e.target.value)}
               value={onChangeUpdateEmail}
-              placeholder='Enter email'
               readOnly
             />
             <input
@@ -290,7 +314,6 @@ function UserManagement() {
               name='updatePhone'
               onChange={(e) => setOnChangeUpdatePhone(e.target.value)}
               value={onChangeUpdatePhone}
-              placeholder='Update phone'
               required
             />
 
