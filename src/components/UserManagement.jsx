@@ -10,9 +10,12 @@ function UserManagement() {
   const [openUserModal, setOpenUserModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const axiosPublic = useAxiosPublic();
-  const [onChangeUpdateName, setOnChangeUpdateName] = useState("");
+
+  const [onChangeUpdateFirstName, setOnChangeUpdateFirstName] = useState("");
+  const [onChangeUpdateLastName, setOnChangeUpdateLastName] = useState("");
   const [onChangeUpdateEmail, setOnChangeUpdateEmail] = useState("");
-  const [targetedUserEmail, setTargetedUserEmail] = useState("");
+  const [onChangeUpdatePhone, setOnChangeUpdatePhone] = useState(null);
+
   const [updateError, setUpdateError] = useState({
     nameError: "",
     emailError: "",
@@ -64,12 +67,12 @@ function UserManagement() {
   const handleUpdateUser = (user) => {
     setOpenUpdateModal(true);
 
-    const { name, email } = user;
-    console.log("every ", name, email);
+    const { firstname, lastname, email, phone } = user;
 
-    setOnChangeUpdateName(name);
+    setOnChangeUpdateFirstName(firstname);
+    setOnChangeUpdateLastName(lastname);
     setOnChangeUpdateEmail(email);
-    setTargetedUserEmail(email);
+    setOnChangeUpdatePhone(phone);
   };
 
   const handleUpdateUserSubmit = (e) => {
@@ -79,23 +82,16 @@ function UserManagement() {
       emailError: "",
     });
 
-    const updatedUserInfo = { onChangeUpdateName, onChangeUpdateEmail };
-    if (onChangeUpdateName.length < 3) {
-      return setUpdateError({
-        ...updateError,
-        nameError: "Update name must 3 characters",
-      });
-    }
-    const emailCheck = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (!emailCheck.test(onChangeUpdateEmail)) {
-      return setUpdateError({
-        ...updateError,
-        emailError: "Invalid email!",
-      });
-    }
+    const updatedUserInfo = {
+      firstname: onChangeUpdateFirstName,
+      lastname: onChangeUpdateLastName,
+      phone: onChangeUpdatePhone,
+    };
+
+    console.log(updatedUserInfo);
 
     axiosPublic
-      .put(`/update/${targetedUserEmail}`, updatedUserInfo)
+      .put(`/api/update/${onChangeUpdateEmail}`, updatedUserInfo)
       .then((res) => {
         if (res.data.message === "success") {
           refetch();
@@ -266,22 +262,37 @@ function UserManagement() {
           <form onSubmit={handleUpdateUserSubmit} className='user_form'>
             <input
               type='text'
-              value={onChangeUpdateName}
-              onChange={(e) => setOnChangeUpdateName(e.target.value)}
-              name='updateName'
-              placeholder='Enter name'
+              value={onChangeUpdateFirstName}
+              onChange={(e) => setOnChangeUpdateFirstName(e.target.value)}
+              name='updateFirstName'
+              //   placeholder='Update first name'
               required
             />
-            <p className='error'>{updateError.nameError}</p>
+            <input
+              type='text'
+              value={onChangeUpdateLastName}
+              onChange={(e) => setOnChangeUpdateLastName(e.target.value)}
+              name='updateLastName'
+              //   placeholder='Enter name'
+              required
+            />
+            {/* <p className='error'>{updateError.nameError}</p> */}
             <input
               type='email'
               name='updateEmail'
               onChange={(e) => setOnChangeUpdateEmail(e.target.value)}
               value={onChangeUpdateEmail}
               placeholder='Enter email'
+              readOnly
+            />
+            <input
+              type='number'
+              name='updatePhone'
+              onChange={(e) => setOnChangeUpdatePhone(e.target.value)}
+              value={onChangeUpdatePhone}
+              placeholder='Update phone'
               required
             />
-            <p className='error'>{updateError.emailError}</p>
 
             <button type='submit' className='btn submit_btn'>
               Update
