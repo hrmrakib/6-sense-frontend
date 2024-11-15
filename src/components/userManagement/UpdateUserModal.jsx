@@ -8,18 +8,10 @@ const UpdateUserModal = ({
   refetch,
   currentUser,
 }) => {
-  const [onChangeUpdateFirstName, setOnChangeUpdateFirstName] = useState(
-    currentUser?.firstname
-  );
-  const [onChangeUpdateLastName, setOnChangeUpdateLastName] = useState(
-    currentUser?.lastname
-  );
-  const [onChangeUpdateEmail, setOnChangeUpdateEmail] = useState(
-    currentUser?.email
-  );
-  const [onChangeUpdatePhone, setOnChangeUpdatePhone] = useState(
-    currentUser?.phone
-  );
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState();
 
   const axiosPublic = useAxiosPublic();
 
@@ -27,13 +19,15 @@ const UpdateUserModal = ({
     e.preventDefault();
 
     const updatedUserInfo = {
-      firstname: onChangeUpdateFirstName,
-      lastname: onChangeUpdateLastName,
-      phone: onChangeUpdatePhone,
+      firstname: firstName,
+      lastname: lastName,
+      phone: phone,
     };
 
+    console.log({ updatedUserInfo });
+
     axiosPublic
-      .put(`/api/update/${onChangeUpdateEmail}`, updatedUserInfo)
+      .put(`/api/update/${email}`, updatedUserInfo)
       .then((res) => {
         if (res.data?.modifiedCount > 0) {
           refetch();
@@ -45,8 +39,6 @@ const UpdateUserModal = ({
         toast.error(err.message);
       });
   };
-
-  console.log(currentUser);
 
   return (
     <div>
@@ -64,31 +56,31 @@ const UpdateUserModal = ({
           <form onSubmit={handleUpdateUserSubmit} className='user_form'>
             <input
               type='text'
-              value={onChangeUpdateFirstName || currentUser.firstname}
-              onChange={(e) => setOnChangeUpdateFirstName(e.target.value)}
-              name='updateFirstName'
+              value={firstName || currentUser.firstname}
+              onChange={(e) => setFirstName(e.target.value)}
+              name='firstName'
               required
             />
             <input
               type='text'
-              value={onChangeUpdateLastName || currentUser.lastname}
-              onChange={(e) => setOnChangeUpdateLastName(e.target.value)}
-              name='updateLastName'
+              value={lastName || currentUser.lastname}
+              onChange={(e) => setLastName(e.target.value)}
+              name='lastName'
               required
             />
 
             <input
               type='email'
-              name='updateEmail'
-              onChange={(e) => setOnChangeUpdateEmail(e.target.value)}
-              value={onChangeUpdateEmail || currentUser.email}
+              name='email'
+              onChange={(e) => setEmail(e.target.value)}
+              value={email || currentUser.email}
               readOnly
             />
             <input
               type='number'
-              name='updatePhone'
-              onChange={(e) => setOnChangeUpdatePhone(e.target.value)}
-              value={onChangeUpdatePhone || currentUser.phone}
+              name='phone'
+              onChange={(e) => setPhone(e.target.value)}
+              value={phone || currentUser.phone}
               required
             />
 
