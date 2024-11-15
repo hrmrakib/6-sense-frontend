@@ -4,13 +4,17 @@ import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import UserDetailModal from "./userManagement/UserDetailModal";
+import CreateUserModal from "./userManagement/CreateUserModal";
+import UpdateUserModal from "./userManagement/UpdateUserModal";
 
 function UserManagement() {
-  const [nameError, setNameError] = useState("");
   const [openUserModal, setOpenUserModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const axiosPublic = useAxiosPublic();
+
+  const [currentUpdateableUser, setCurrentUpdateableUser] = useState(null);
 
   const [onChangeUpdateFirstName, setOnChangeUpdateFirstName] = useState("");
   const [onChangeUpdateLastName, setOnChangeUpdateLastName] = useState("");
@@ -37,72 +41,10 @@ function UserManagement() {
     },
   });
 
-  const handleCreateUser = (e) => {
-    e.preventDefault();
-    setNameError("");
-
-    const firstname = e.target.firstname.value.trim();
-    const lastname = e.target.lastname.value.trim();
-    const email = e.target.email.value;
-    const phone = e.target.phone.value;
-
-    axiosPublic
-      .post("/api/create", { firstname, lastname, email, phone })
-      .then((res) => {
-        console.log(res);
-
-        if (res.data?.message) {
-          return toast.error(res.data.message);
-        }
-        if (res.data?.insertedId) {
-          refetch();
-          return toast.success("User created successfully!");
-        }
-      })
-      .catch((err) => {
-        console.log("erroooor", err.message);
-      });
-
-    setTimeout(() => {
-      return setOpenUserModal(false);
-    }, 99);
-  };
-
   const handleUpdateUser = (user) => {
     setOpenUpdateModal(true);
 
-    const { firstname, lastname, email, phone } = user;
-
-    setOnChangeUpdateFirstName(firstname);
-    setOnChangeUpdateLastName(lastname);
-    setOnChangeUpdateEmail(email);
-    setOnChangeUpdatePhone(phone);
-  };
-
-  const handleUpdateUserSubmit = (e) => {
-    e.preventDefault();
-
-    const updatedUserInfo = {
-      firstname: onChangeUpdateFirstName,
-      lastname: onChangeUpdateLastName,
-      phone: onChangeUpdatePhone,
-    };
-
-    console.log(updatedUserInfo);
-
-    axiosPublic
-      .put(`/api/update/${onChangeUpdateEmail}`, updatedUserInfo)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data?.modifiedCount > 0) {
-          refetch();
-          toast.success("Updated successfully!");
-          setOpenUpdateModal(false);
-        }
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+    setCurrentUpdateableUser(user);
   };
 
   const handleDeleteUser = (user) => {
@@ -237,137 +179,26 @@ function UserManagement() {
       </table>
 
       {/* Create user form */}
-      {openUserModal && (
-        <div className='create_user'>
-          <div className='create_user_heading'>
-            <h2>Create a new user</h2>
-            <div
-              onClick={() => setOpenUserModal(false)}
-              className='close_user_modal'
-            >
-              Close
-            </div>
-          </div>
-          <form onSubmit={handleCreateUser} className='user_form'>
-            <input
-              type='text'
-              name='firstname'
-              placeholder='Enter first name'
-              required
-            />
-            <input
-              type='text'
-              name='lastname'
-              placeholder='Enter last name'
-              required
-            />
-            <p className='error'>{nameError}</p>
-            <input
-              type='email'
-              name='email'
-              placeholder='Enter email'
-              required
-            />
-            <input
-              type='number'
-              name='phone'
-              placeholder='Enter phone number'
-              required
-            />
-            <button type='submit' className='btn submit_btn'>
-              Submit
-            </button>
-          </form>
-        </div>
-      )}
+      <CreateUserModal
+        openUserModal={openUserModal}
+        setOpenUserModal={setOpenUserModal}
+        refetch={refetch}
+      />
 
       {/* update user info */}
-      {openUpdateModal && (
-        <div className='create_user'>
-          <div className='create_user_heading'>
-            <h2>Update the user</h2>
-            <div
-              onClick={() => setOpenUpdateModal(false)}
-              className='close_user_modal'
-            >
-              Close
-            </div>
-          </div>
-          <form onSubmit={handleUpdateUserSubmit} className='user_form'>
-            <input
-              type='text'
-              value={onChangeUpdateFirstName}
-              onChange={(e) => setOnChangeUpdateFirstName(e.target.value)}
-              name='updateFirstName'
-              required
-            />
-            <input
-              type='text'
-              value={onChangeUpdateLastName}
-              onChange={(e) => setOnChangeUpdateLastName(e.target.value)}
-              name='updateLastName'
-              required
-            />
+      <UpdateUserModal
+        openUpdateModal={openUpdateModal}
+        setOpenUpdateModal={setOpenUpdateModal}
+        refetch={refetch}
+        currentUpdateableUser={currentUpdateableUser}
+      />
 
-            <input
-              type='email'
-              name='updateEmail'
-              onChange={(e) => setOnChangeUpdateEmail(e.target.value)}
-              value={onChangeUpdateEmail}
-              readOnly
-            />
-            <input
-              type='number'
-              name='updatePhone'
-              onChange={(e) => setOnChangeUpdatePhone(e.target.value)}
-              value={onChangeUpdatePhone}
-              required
-            />
-
-            <button type='submit' className='btn submit_btn'>
-              Update
-            </button>
-          </form>
-        </div>
-      )}
-
-      {/* update user info */}
-      {openDetailModal && (
-        <div className='create_user'>
-          <div className='create_user_heading'>
-            <h3>
-              Detail of {`${userDetail.firstname} ${userDetail.lastname}`}
-            </h3>
-            <div
-              onClick={() => setOpenDetailModal(false)}
-              className='close_user_modal'
-            >
-              Close
-            </div>
-          </div>
-
-          <div>
-            <p className='mt-2'>
-              <span className='font-bold'>First Name:</span>{" "}
-              {userDetail.firstname}
-            </p>
-            <p className='mt-2'>
-              <span className='font-bold'>Last Name:</span>{" "}
-              {userDetail.lastname}
-            </p>
-            <p className='mt-2'>
-              <span className='font-bold'>Email:</span> {userDetail.email}
-            </p>
-            <p className='mt-2'>
-              <span className='font-bold'>Phone:</span> {userDetail.phone}
-            </p>
-            <p className='mt-2'>
-              <span className='font-bold'>User Status:</span>{" "}
-              {userDetail.status ? "Block" : "Unblock"}
-            </p>
-          </div>
-        </div>
-      )}
+      {/* user detail info */}
+      <UserDetailModal
+        openDetailModal={openDetailModal}
+        userDetail={userDetail}
+        setOpenDetailModal={setOpenDetailModal}
+      />
     </div>
   );
 }
