@@ -97,7 +97,6 @@ function UserManagement() {
       });
   };
 
-  console.log(currentUser);
   return (
     <div className='table_container'>
       <Toaster position='top-center' reverseOrder={false} />

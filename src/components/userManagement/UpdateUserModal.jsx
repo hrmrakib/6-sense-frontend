@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 
@@ -13,8 +13,18 @@ const UpdateUserModal = ({
   const [email, setEmail] = useState(currentUser?.email);
   const [phone, setPhone] = useState(currentUser?.phone);
 
+  useEffect(() => {
+    setFirstName(currentUser?.firstname);
+    setLastName(currentUser?.lastname);
+    setEmail(currentUser?.email);
+    setPhone(currentUser?.phone);
+  }, [currentUser]);
+
   const axiosPublic = useAxiosPublic();
+
   console.log(currentUser);
+  console.log("state", firstname, lastname, email, phone);
+
   const handleUpdateUserSubmit = (e) => {
     e.preventDefault();
 
