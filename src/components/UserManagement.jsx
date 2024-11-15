@@ -165,8 +165,6 @@ function UserManagement() {
       });
   };
 
-  console.log({ userDetail });
-
   return (
     <div className='table_container'>
       <Toaster position='top-center' reverseOrder={false} />
@@ -341,7 +339,9 @@ function UserManagement() {
       {openDetailModal && (
         <div className='create_user'>
           <div className='create_user_heading'>
-            <h3>Detail of {userDetail.firstname}</h3>
+            <h3>
+              Detail of {`${userDetail.firstname} ${userDetail.lastname}`}
+            </h3>
             <div
               onClick={() => setOpenDetailModal(false)}
               className='close_user_modal'
