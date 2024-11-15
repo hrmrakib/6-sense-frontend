@@ -154,3 +154,9 @@
 .underline {
   text-decoration: underline;
 }
+.mt-2 {
+  margin-top: 8px;
+}
+.font-bold {
+  font-weight: 700;
+}

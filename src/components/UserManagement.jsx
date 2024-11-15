@@ -8,6 +8,7 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 function UserManagement() {
   const [nameError, setNameError] = useState("");
   const [openUserModal, setOpenUserModal] = useState(false);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const axiosPublic = useAxiosPublic();
 
@@ -16,9 +17,12 @@ function UserManagement() {
   const [onChangeUpdateEmail, setOnChangeUpdateEmail] = useState("");
   const [onChangeUpdatePhone, setOnChangeUpdatePhone] = useState(null);
 
-  const [updateError, setUpdateError] = useState({
-    nameError: "",
-    emailError: "",
+  const [userDetail, setUserDetail] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    status: false,
   });
 
   const {
@@ -137,11 +141,18 @@ function UserManagement() {
   };
 
   const handleUserDetail = (user) => {
+    setOpenDetailModal(true);
     console.log(user);
+    setUserDetail({
+      firstname: user?.firstname,
+      lastname: user?.lastname,
+      email: user?.email,
+      phone: user?.phone,
+      status: user?.block,
+    });
   };
 
   const handleBlockUser = (user) => {
-    refetch();
     axiosPublic
       .put(`/api/userStatus/${user.email}`)
       .then((res) => {
@@ -154,13 +165,15 @@ function UserManagement() {
       });
   };
 
+  console.log({ userDetail });
+
   return (
     <div className='table_container'>
       <Toaster position='top-center' reverseOrder={false} />
       <div className='header_box'>
         <h2 className='container_heading'>Users Information</h2>
         <button onClick={() => setOpenUserModal(true)} className='btn'>
-          Add
+          Add New User
         </button>
       </div>
       <table className='table'>
@@ -321,6 +334,42 @@ function UserManagement() {
               Update
             </button>
           </form>
+        </div>
+      )}
+
+      {/* update user info */}
+      {openDetailModal && (
+        <div className='create_user'>
+          <div className='create_user_heading'>
+            <h3>Detail of {userDetail.firstname}</h3>
+            <div
+              onClick={() => setOpenDetailModal(false)}
+              className='close_user_modal'
+            >
+              Close
+            </div>
+          </div>
+
+          <div>
+            <p className='mt-2'>
+              <span className='font-bold'>First Name:</span>{" "}
+              {userDetail.firstname}
+            </p>
+            <p className='mt-2'>
+              <span className='font-bold'>Last Name:</span>{" "}
+              {userDetail.lastname}
+            </p>
+            <p className='mt-2'>
+              <span className='font-bold'>Email:</span> {userDetail.email}
+            </p>
+            <p className='mt-2'>
+              <span className='font-bold'>Phone:</span> {userDetail.phone}
+            </p>
+            <p className='mt-2'>
+              <span className='font-bold'>User Status:</span>{" "}
+              {userDetail.status ? "Block" : "Unblock"}
+            </p>
+          </div>
         </div>
       )}
     </div>
