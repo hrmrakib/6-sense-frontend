@@ -38,7 +38,6 @@ function UserManagement() {
 
   const handleUpdateUser = (user) => {
     setOpenUpdateModal(true);
-
     setCurrentUser(user);
   };
 

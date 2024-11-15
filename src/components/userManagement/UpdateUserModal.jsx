@@ -14,14 +14,14 @@ const UpdateUserModal = ({
   const [phone, setPhone] = useState(currentUser?.phone);
 
   const axiosPublic = useAxiosPublic();
-
+  console.log(currentUser);
   const handleUpdateUserSubmit = (e) => {
     e.preventDefault();
 
     const updatedUserInfo = {
-      firstname,
-      lastname,
-      phone,
+      firstname: firstname,
+      lastname: lastname,
+      phone: phone,
     };
 
     console.log({ updatedUserInfo });
