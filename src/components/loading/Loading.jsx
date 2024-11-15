@@ -4,7 +4,7 @@ const Loading = ({ loading }) => {
   return (
     <div className='tbody_row'>
       {loading && (
-        <td
+        <div
           style={{
             width: "100px",
             height: "100px",
@@ -15,7 +15,7 @@ const Loading = ({ loading }) => {
           }}
         >
           <ScaleLoader />
-        </td>
+        </div>
       )}
     </div>
   );
