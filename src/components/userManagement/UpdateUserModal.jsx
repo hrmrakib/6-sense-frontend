@@ -8,8 +8,8 @@ const UpdateUserModal = ({
   refetch,
   currentUser,
 }) => {
-  const [firstname, setFirstName] = useState(currentUser?.firstName);
-  const [lastname, setLastName] = useState(currentUser?.lastName);
+  const [firstname, setFirstName] = useState(currentUser?.firstname);
+  const [lastname, setLastName] = useState(currentUser?.lastname);
   const [email, setEmail] = useState(currentUser?.email);
   const [phone, setPhone] = useState(currentUser?.phone);
 
