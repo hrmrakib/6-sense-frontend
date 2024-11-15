@@ -8,8 +8,8 @@ const UpdateUserModal = ({
   refetch,
   currentUser,
 }) => {
-  const [firstName, setFirstName] = useState(currentUser?.firstName);
-  const [lastName, setLastName] = useState(currentUser?.lastName);
+  const [firstname, setFirstName] = useState(currentUser?.firstName);
+  const [lastname, setLastName] = useState(currentUser?.lastName);
   const [email, setEmail] = useState(currentUser?.email);
   const [phone, setPhone] = useState(currentUser?.phone);
 
@@ -19,15 +19,15 @@ const UpdateUserModal = ({
     e.preventDefault();
 
     const updatedUserInfo = {
-      firstname: firstName,
-      lastname: lastName,
-      phone: phone,
+      firstname,
+      lastname,
+      phone,
     };
 
     console.log({ updatedUserInfo });
 
     axiosPublic
-      .put(`/api/update/${email}`, updatedUserInfo)
+      .put(`/api/update/${currentUser?.email}`, updatedUserInfo)
       .then((res) => {
         if (res.data?.modifiedCount > 0) {
           refetch();
@@ -56,16 +56,18 @@ const UpdateUserModal = ({
           <form onSubmit={handleUpdateUserSubmit} className='user_form'>
             <input
               type='text'
-              value={firstName || currentUser.firstname}
-              onChange={(e) => setFirstName(e.target.value)}
               name='firstName'
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstname}
+              defaultValue={currentUser?.firstname}
               required
             />
             <input
               type='text'
-              value={lastName || currentUser.lastname}
-              onChange={(e) => setLastName(e.target.value)}
               name='lastName'
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastname}
+              defaultValue={currentUser?.lastname}
               required
             />
 
@@ -73,14 +75,16 @@ const UpdateUserModal = ({
               type='email'
               name='email'
               onChange={(e) => setEmail(e.target.value)}
-              value={email || currentUser.email}
+              value={email}
+              defaultValue={currentUser?.email}
               readOnly
             />
             <input
               type='number'
               name='phone'
               onChange={(e) => setPhone(e.target.value)}
-              value={phone || currentUser.phone}
+              value={phone}
+              defaultValue={currentUser?.phone}
               required
             />
 
