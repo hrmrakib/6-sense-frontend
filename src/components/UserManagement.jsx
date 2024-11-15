@@ -81,10 +81,6 @@ function UserManagement() {
 
   const handleUpdateUserSubmit = (e) => {
     e.preventDefault();
-    setUpdateError({
-      nameError: "",
-      emailError: "",
-    });
 
     const updatedUserInfo = {
       firstname: onChangeUpdateFirstName,
