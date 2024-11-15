@@ -9,16 +9,16 @@ const UpdateUserModal = ({
   currentUpdateableUser,
 }) => {
   const [onChangeUpdateFirstName, setOnChangeUpdateFirstName] = useState(
-    currentUpdateableUser.firstname
+    currentUpdateableUser?.firstname
   );
   const [onChangeUpdateLastName, setOnChangeUpdateLastName] = useState(
-    currentUpdateableUser.lastname
+    currentUpdateableUser?.lastname
   );
   const [onChangeUpdateEmail, setOnChangeUpdateEmail] = useState(
-    currentUpdateableUser.email
+    currentUpdateableUser?.email
   );
   const [onChangeUpdatePhone, setOnChangeUpdatePhone] = useState(
-    currentUpdateableUser.phone
+    currentUpdateableUser?.phone
   );
 
   const axiosPublic = useAxiosPublic();

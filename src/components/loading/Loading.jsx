@@ -2,9 +2,9 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Loading = ({ loading }) => {
   return (
-    <div className='tbody_row'>
+    <tr className='tbody_row'>
       {loading && (
-        <div
+        <td
           style={{
             width: "100px",
             height: "100px",
@@ -15,9 +15,9 @@ const Loading = ({ loading }) => {
           }}
         >
           <ScaleLoader />
-        </div>
+        </td>
       )}
-    </div>
+    </tr>
   );
 };
 
