@@ -1,24 +1,24 @@
 import { useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const UpdateUserModal = ({
   openUpdateModal,
   setOpenUpdateModal,
   refetch,
-  currentUpdateableUser,
+  currentUser,
 }) => {
   const [onChangeUpdateFirstName, setOnChangeUpdateFirstName] = useState(
-    currentUpdateableUser?.firstname
+    currentUser?.firstname
   );
   const [onChangeUpdateLastName, setOnChangeUpdateLastName] = useState(
-    currentUpdateableUser?.lastname
+    currentUser?.lastname
   );
   const [onChangeUpdateEmail, setOnChangeUpdateEmail] = useState(
-    currentUpdateableUser?.email
+    currentUser?.email
   );
   const [onChangeUpdatePhone, setOnChangeUpdatePhone] = useState(
-    currentUpdateableUser?.phone
+    currentUser?.phone
   );
 
   const axiosPublic = useAxiosPublic();
@@ -46,6 +46,8 @@ const UpdateUserModal = ({
       });
   };
 
+  console.log(currentUser);
+
   return (
     <div>
       {openUpdateModal && (
@@ -62,14 +64,14 @@ const UpdateUserModal = ({
           <form onSubmit={handleUpdateUserSubmit} className='user_form'>
             <input
               type='text'
-              value={onChangeUpdateFirstName}
+              value={onChangeUpdateFirstName || currentUser.firstname}
               onChange={(e) => setOnChangeUpdateFirstName(e.target.value)}
               name='updateFirstName'
               required
             />
             <input
               type='text'
-              value={onChangeUpdateLastName}
+              value={onChangeUpdateLastName || currentUser.lastname}
               onChange={(e) => setOnChangeUpdateLastName(e.target.value)}
               name='updateLastName'
               required
@@ -79,14 +81,14 @@ const UpdateUserModal = ({
               type='email'
               name='updateEmail'
               onChange={(e) => setOnChangeUpdateEmail(e.target.value)}
-              value={onChangeUpdateEmail}
+              value={onChangeUpdateEmail || currentUser.email}
               readOnly
             />
             <input
               type='number'
               name='updatePhone'
               onChange={(e) => setOnChangeUpdatePhone(e.target.value)}
-              value={onChangeUpdatePhone}
+              value={onChangeUpdatePhone || currentUser.phone}
               required
             />
 

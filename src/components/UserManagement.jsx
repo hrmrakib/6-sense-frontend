@@ -14,7 +14,7 @@ function UserManagement() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const axiosPublic = useAxiosPublic();
 
-  const [currentUpdateableUser, setCurrentUpdateableUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [userDetail, setUserDetail] = useState({
     firstname: "",
@@ -39,7 +39,7 @@ function UserManagement() {
   const handleUpdateUser = (user) => {
     setOpenUpdateModal(true);
 
-    setCurrentUpdateableUser(user);
+    setCurrentUser(user);
   };
 
   const handleDeleteUser = (user) => {
@@ -98,6 +98,7 @@ function UserManagement() {
       });
   };
 
+  console.log(currentUser);
   return (
     <div className='table_container'>
       <Toaster position='top-center' reverseOrder={false} />
@@ -170,7 +171,7 @@ function UserManagement() {
         openUpdateModal={openUpdateModal}
         setOpenUpdateModal={setOpenUpdateModal}
         refetch={refetch}
-        currentUpdateableUser={currentUpdateableUser}
+        currentUser={currentUser}
       />
 
       {/* user detail info */}
